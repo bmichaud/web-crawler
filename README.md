@@ -9,3 +9,6 @@ A simple web crawler that will crawl a given web resource and map out all non-re
 
 ## How to run:
 `./gradlew run --args="<website_url>"`
+
+## How to test:
+`./gradlew test`

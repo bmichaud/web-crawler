@@ -36,11 +36,11 @@ afterEvaluate {
 sourceSets {
     main {
         java { srcDirs = [] }
-        groovy { srcDirs += ['src/main/groovy'] }
+        groovy { srcDirs = ["src/main/java", 'src/main/groovy'] }
     }
     test {
         java { srcDirs = [] }
-        groovy { srcDirs += ['src/test/groovy'] }
+        groovy { srcDirs = ['src/test/groovy'] }
     }
 }
 
@@ -49,9 +49,9 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar) {
-    from javadoc
-    archiveClassifier = 'javadoc'
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier 'javadoc'
+    from groovydoc.destinationDir
 }
 
 compileJava {
@@ -79,7 +79,7 @@ publishing {
             artifactId project.name
             version project.version + (project.hasProperty('release') ? '' : '-SNAPSHOT')
             artifact sourcesJar
-            artifact javadocJar
+            artifact groovydocJar
             versionMapping {
                 usage('java-api') {
                     fromResolutionOf('runtimeClasspath')

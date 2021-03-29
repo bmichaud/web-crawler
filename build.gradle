@@ -1,0 +1,138 @@
+plugins {
+    id 'groovy'
+    id 'application'
+    id 'maven-publish'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation group: 'org.codehaus.groovy', name: 'groovy-all', version: "${groovyVersion}"
+
+    implementation group: 'com.google.guava', name: 'guava', version: "${guavaVersion}"
+    implementation group: 'org.jsoup', name: 'jsoup', version: "${jsoupVersion}"
+
+    testImplementation group: 'org.spockframework', name: 'spock-core', version: "${spockVersion}"
+    testImplementation group: 'junit', name: 'junit', version: "${junitVersion}"
+}
+
+project.version = new File(projectDir, "version").text
+println "Project group: ${group}, name: ${name}, version: ${version}"
+
+afterEvaluate {
+    def host = new ByteArrayOutputStream()
+    exec {
+        commandLine = "hostname"
+        standardOutput = host
+    }
+    ext.hostname = "${host}"
+    def buildNum = System.getenv('BUILD_NUMBER')
+    def compName = System.getenv('COMPUTERNAME')
+    ext.versionSuffix = (buildNum ? buildNum : (compName ? compName : ext.hostname))
+}
+
+sourceSets {
+    main {
+        java { srcDirs = [] }
+        groovy { srcDirs += ['src/main/groovy'] }
+    }
+    test {
+        java { srcDirs = [] }
+        groovy { srcDirs += ['src/test/groovy'] }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+compileJava {
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+    options.debug = !project.hasProperty('release')
+}
+
+jar {
+    doFirst {
+        manifest {
+            attributes 'Main-Class': project.mainClassName
+            def now = new Date()
+            attributes("Implementation-Title": project.name, "Implementation-Version": "${project.version}.${rootProject.versionSuffix} ${now}")
+        }
+    }
+    archiveBaseName = project.name
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId project.name
+            version project.version + (project.hasProperty('release') ? '' : '-SNAPSHOT')
+            artifact sourcesJar
+            artifact javadocJar
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'Web Crawler'
+                description = 'Web Crawler Application'
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'ben.a.michaud'
+                        name = 'Ben A Michaud'
+                        email = 'bmichaudms@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'git@github.com:bmichaud/web-crawler.git'
+                    developerConnection = 'git@github.com:bmichaud/web-crawler.git'
+                    url = 'https://github.com/bmichaud/web-crawler'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name "PublicMavenRepo"
+            def releaseRepoUrl = "https://${artifactRepoHostPort}/service/local/staging/deploy/maven2/"
+            def snapshotRepoUrl = "https://${artifactRepoHostPort}/service/local/staging/deploy/maven2/"
+            url = project.hasProperty('release') ? releaseRepoUrl : snapshotRepoUrl
+            credentials {
+                username = System.getenv('ARTIFACT_USERNAME')
+                password = System.getenv('ARTIFACT_PASSWORD')
+            }
+        }
+    }
+}
+
+if (project.hasProperty("signing.keyId")) {
+    apply plugin: 'signing'
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
+
+application {
+    mainClass = project.mainClassName
+}

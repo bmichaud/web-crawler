@@ -1,0 +1,22 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+.idea/workspace.xml
+.idea/jarRepositories.xml
+.idea/gradle.xml
+.idea/jarRepositories.xml
+.idea/shelf/
+.idea/artifacts/
+.idea/libraries/
+
+# platform-specific patterns
+.DS_Store
+Thumbs.db
+
+# various output folders
+**/target/
+**/out/
+**/build/
+**/bin/
+**/dist/
+**/tmp/
+**/logs/

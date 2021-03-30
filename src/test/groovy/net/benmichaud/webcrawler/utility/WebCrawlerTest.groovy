@@ -17,7 +17,7 @@ class WebCrawlerTest extends Specification {
 
         when:
         println "Testing web crawler with non-null argument..."
-        def responseJson = crawler.crawl(urlString)
+        def responseJson = crawler.crawl(urlString).toJsonString()
         def responseMap = slurper.parseText(responseJson)
         println "response:\n" + responseJson
 
@@ -34,7 +34,7 @@ class WebCrawlerTest extends Specification {
 
         when:
         println "Testing web crawler with non-null argument..."
-        def responseJson = crawler.crawl(urlString)
+        def responseJson = crawler.crawl(urlString).toJsonString()
         def responseMap = slurper.parseText(responseJson)
         println "response:\n" + responseJson
 

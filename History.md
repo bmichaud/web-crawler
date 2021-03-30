@@ -1,3 +1,8 @@
+0.1.2 / 2021-03-30
+==================
+
+  * The crawler.crawl() method now returns the Site object. Two post-crawl access methods are now available: getJson(Site) and getPrettyJson(Site).
+
 0.1.1 / 2021-03-30
 ==================
 

@@ -20,7 +20,7 @@ class App {
             def urlString = args[0]
             if (urlString) {
                 def wc = new WebCrawler()
-                def json = wc.crawl(urlString)
+                def json = wc.crawl(urlString).toJsonString()
                 def fileName = (args.length > 1 ? args[1] : DEFAULT_FILE)
                 File file = new File(fileName)
                 file.write(json)

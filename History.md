@@ -1,3 +1,9 @@
+0.1.0 / 2021-03-30
+==================
+
+  * Added javabeans to encapsulate web crawling data in a structure.
+  * Added parsing logic in the WebCrawler class and augmented the tests.
+  * Added logging libraries and configurations for debug logging.
 
 0.0.1 / 2021-03-29
 ==================

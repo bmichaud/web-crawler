@@ -1,3 +1,8 @@
+0.1.1 / 2021-03-30
+==================
+
+  * Resolved many issues related to building or parsing web site data.
+
 0.1.0 / 2021-03-30
 ==================
 

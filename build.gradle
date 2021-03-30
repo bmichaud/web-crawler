@@ -12,11 +12,7 @@ dependencies {
     implementation group: 'org.codehaus.groovy', name: 'groovy-all', version: "${groovyVersion}"
 
     implementation group: "ch.qos.logback", name: "logback-classic", version: "${logbackVersion}"
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${jacksonVersion}"
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jacksonVersion}"
-    implementation group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: "${tagsoupVersion}"
-//    implementation group: 'com.google.guava', name: 'guava', version: "${guavaVersion}"
-//    implementation group: 'org.jsoup', name: 'jsoup', version: "${jsoupVersion}"
+    implementation group: 'org.jsoup', name: 'jsoup', version: "${jsoupVersion}"
 
     testImplementation group: 'org.spockframework', name: 'spock-core', version: "${spockVersion}"
     testImplementation group: 'junit', name: 'junit', version: "${junitVersion}"
@@ -43,7 +39,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainClass = project.mainClassName
-    applicationDefaultJvmArgs = ['-Xverify:none']
+    applicationDefaultJvmArgs = ['-Xverify:none', '-Xms1024m', '-Xmx4096m']
 }
 
 sourceSets {

@@ -3,6 +3,7 @@ package net.benmichaud.webcrawler.utility
 import groovy.json.JsonSlurper
 import org.codehaus.groovy.runtime.powerassert.PowerAssertionError
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * a test class for the {@link WebCrawler} class
@@ -51,5 +52,22 @@ class WebCrawlerTest extends Specification {
 
         then:
         PowerAssertionError e = thrown()
+    }
+
+    @Unroll
+    def "JSON value: [#value], expected escaped value: [#expected]"(value, expected) {
+        setup:
+        def webCrawler = new WebCrawler()
+        println "value: [$value], expected: [$expected]"
+
+        expect:
+        webCrawler.escapeJsonValue(value) == expected
+
+        where:
+        value           | expected
+        null            | null
+        ""              | ""
+        'no quotes'     | 'no quotes'
+        '{"test": "value1", "json": "value2"}'  | '{\\"test\\": \\"value1\\", \\"json\\": \\"value2\\"}'
     }
 }

@@ -18,5 +18,5 @@ appender("File", RollingFileAppender) {
         pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     }
 }
-logger("net.benmichaud.webcrawler", DEBUG, ["File"])
-root(DEBUG, ["STDOUT"])
+logger("net.benmichaud.webcrawler", WARN, ["File"])
+root(WARN, ["STDOUT"])

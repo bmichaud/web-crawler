@@ -20,3 +20,6 @@ Thumbs.db
 **/dist/
 **/tmp/
 **/logs/
+*.log
+*.json
+

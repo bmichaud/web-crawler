@@ -1,6 +1,7 @@
-package net.benmichaud.web.crawler
+package net.benmichaud.webcrawler
 
-import net.benmichaud.web.crawler.utility.WebCrawler
+
+import net.benmichaud.webcrawler.utility.WebCrawler
 
 /**
  * This is the main class for the web crawler application.
